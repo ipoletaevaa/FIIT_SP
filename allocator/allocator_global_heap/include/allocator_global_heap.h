@@ -8,39 +8,24 @@ class allocator_global_heap final:
     private allocator_dbg_helper,
     public smart_mem_resource
 {
-
 private:
-
-    static constexpr const size_t size_t_size = sizeof(size_t);
+    class impl;
+    impl* m_impl;
 
 public:
-    
     explicit allocator_global_heap();
-    
     ~allocator_global_heap() override;
     
-    allocator_global_heap(
-        allocator_global_heap const &other);
+    allocator_global_heap(const allocator_global_heap &other);
+    allocator_global_heap &operator=(const allocator_global_heap &other);
     
-    allocator_global_heap &operator=(
-        allocator_global_heap const &other);
-    
-    allocator_global_heap(
-        allocator_global_heap &&other) noexcept;
-    
-    allocator_global_heap &operator=(
-        allocator_global_heap &&other) noexcept;
+    allocator_global_heap(allocator_global_heap &&other) noexcept;
+    allocator_global_heap &operator=(allocator_global_heap &&other) noexcept;
 
 private:
-    
-    [[nodiscard]] void *do_allocate_sm(
-        size_t size) override;
-    
-    void do_deallocate_sm(
-        void *at) override;
-
+    [[nodiscard]] void *do_allocate_sm(size_t size) override;
+    void do_deallocate_sm(void *at) override;
     bool do_is_equal(const std::pmr::memory_resource& other) const noexcept override;
-
 };
 
-#endif //MATH_PRACTICE_AND_OPERATING_SYSTEMS_ALLOCATOR_ALLOCATOR_GLOBAL_HEAP_H
+#endif
