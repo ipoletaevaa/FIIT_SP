@@ -99,7 +99,7 @@ bool allocator_red_black_tree::do_is_equal(const std::pmr::memory_resource &othe
 
     if (!res) throw std::bad_alloc();
 
-    if (!remove_into_tree(res)) throw std::logic_error("failed to remove block from tree");
+    if (!remove_from_tree(res)) throw std::logic_error("failed to remove block from tree");
 
     size_t size_block = get_block_size(res, _trusted_memory);
     if (size_block >= total_size){
@@ -198,7 +198,7 @@ void allocator_red_black_tree::do_deallocate_sm(
         auto* next_neighbor = reinterpret_cast<free_block*>(curr->next_block);
         if (!next_neighbor->data.occupied)
         {
-            if (!remove_into_tree(next_neighbor)) throw std::logic_error("failed to remove block from tree");
+            if (!remove_from_tree(next_neighbor)) throw std::logic_error("failed to remove block from tree");
             curr->next_block = next_neighbor->next_block;
             if (next_neighbor->next_block) reinterpret_cast<occupied_block*>(next_neighbor->next_block)->prev_block = curr;
         }
@@ -208,7 +208,7 @@ void allocator_red_black_tree::do_deallocate_sm(
         auto* prev_neighbor = reinterpret_cast<free_block*>(curr->prev_block);
         if (!prev_neighbor->data.occupied)
         {
-            if (!remove_into_tree(prev_neighbor)) throw std::logic_error("failed to remove block from tree");
+            if (!remove_from_tree(prev_neighbor)) throw std::logic_error("failed to remove block from tree");
             prev_neighbor->next_block = curr->next_block;
             if (curr->next_block) reinterpret_cast<occupied_block*>(curr->next_block)->prev_block = prev_neighbor;
             final_free_ptr = prev_neighbor;
@@ -583,7 +583,7 @@ void allocator_red_black_tree::add_into_tree(void* new_block)noexcept
     on_node_added(new_node);
 }
 
-bool allocator_red_black_tree::remove_into_tree(void* node)noexcept{
+bool allocator_red_black_tree::remove_from_tree(void* node)noexcept{
     if (!node) return false;
     remove_node(reinterpret_cast<free_block*>(node));
     return  true;

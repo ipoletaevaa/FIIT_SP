@@ -49,9 +49,6 @@ private:
 
     void *_trusted_memory;
 
-    // static constexpr const size_t allocator_metadata_size = sizeof(allocator_dbg_helper*) + sizeof(fit_mode) + sizeof(size_t) + sizeof(std::mutex) + sizeof(void*);
-    // static constexpr const size_t occupied_block_metadata_size = sizeof(block_data) + 3 * sizeof(void*);
-    // static constexpr const size_t free_block_metadata_size = sizeof(block_data) + 5 * sizeof(void*);
     static constexpr const size_t allocator_metadata_size = sizeof(allocator_header);
     static constexpr const size_t occupied_block_metadata_size = sizeof(occupied_block);
     static constexpr const size_t free_block_metadata_size = sizeof(free_block);
@@ -126,7 +123,7 @@ private:
     void fix_removed(free_block* parent, free_block* node)noexcept;
     int get_compare(void* u, void* v) noexcept;
     void add_into_tree(void* new_block)noexcept;
-    bool remove_into_tree(void* node)noexcept;
+    bool remove_from_tree(void* node)noexcept;
     void remove_node(free_block* node)noexcept;
 
 private:
@@ -172,4 +169,4 @@ private:
 
 };
 
-#endif //MATH_PRACTICE_AND_OPERATING_SYSTEMS_ALLOCATOR_ALLOCATOR_RED_BLACK_TREE_H
+#endif
